@@ -26,7 +26,7 @@
       (insert "\n")
       (setq tags (cdr tags)))
     (goto-line list-pos)
-    (setq taglist-window (split-window-vertically))
+    (setq taglist-window (split-window-horizontally))
     (set-window-buffer taglist-window "*etags list*")
     (select-window taglist-window)
     (taglist-mode)))
