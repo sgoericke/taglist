@@ -26,7 +26,7 @@
       (insert "\n")
       (setq tags (cdr tags)))
     (goto-line list-pos)
-    (setq taglist-window (split-window-horizontally))
+    (setq taglist-window (split-window-vertically))
     (set-window-buffer taglist-window "*etags list*")
     (select-window taglist-window)
     (taglist-mode)))
@@ -60,9 +60,11 @@
                (line-beginning-position)
                (line-end-position))))
     (string-match "^\t\\([^ ]*\\) L\\([0-9]+\\):\t.*$" line)
-    (taglist-kill)
-    (switch-to-buffer (match-string 1 line))
-    (goto-line (string-to-number (match-string 2 line)))))
+    (let ((file (match-string 1 line))
+          (line (match-string 2 line)))
+      (taglist-kill)
+      (switch-to-buffer file)
+      (goto-line (string-to-number line)))))
 
 (defun taglist-quit nil
   (interactive)
