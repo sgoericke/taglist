@@ -85,6 +85,7 @@
   (setq mode-name "Tag-List")
   (setq font-lock-defaults
         (list 'taglist-keywords))
+  (hl-line-mode)
   (run-mode-hooks 'taglist-mode-hook))
 
 (provide 'taglist)
