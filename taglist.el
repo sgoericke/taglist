@@ -11,9 +11,9 @@
         (kill-buffer "*etags list*"))
     (set-buffer (get-buffer-create "*etags list*"))
     (while tags
-      (insert "\t")
+;;      (insert "\t")
       (insert (buffer-name source-buffer))
-      (insert " L")
+      (insert " ")
       (let ((tag-line
              (with-current-buffer source-buffer
                (line-number-at-pos (cdar tags)))))
@@ -21,7 +21,7 @@
         (if (>= current-line tag-line)
             (setq list-pos
                   (1+ list-pos))))
-      (insert ":\t")
+      (insert ":\t\t")
       (insert (caar tags))
       (insert "\n")
       (setq tags (cdr tags)))
@@ -34,9 +34,15 @@
 (defvar taglist-mode-hook nil)
 
 (defvar taglist-keywords
-  (list (list "^\t\\([^ ]*\\) \\(L[0-9]+\\):\t\\(.*\\)$" 1 font-lock-keyword-face)
-        (list "^\t\\([^ ]*\\) \\(L[0-9]+\\):\t\\(.*\\)$" 2 font-lock-comment-delimiter-face)
-        (list "^\t\\([^ ]*\\) \\(L[0-9]+\\):\t\\(.*\\)$" 3 font-lock-function-name-face)))
+  (list (list "^\\([^ ]*\\)\\( [0-9]+\\):\t\\(.*::\\)*\\(.*\\)$" 1 font-lock-keyword-face)
+        (list "^\\([^ ]*\\)\\( [0-9]+\\):\t\\(.*::\\)*\\(.*\\)$" 2 font-lock-number-face)
+        (list "^\\([^ ]*\\)\\( [0-9]+\\):\t\\(.*::\\)*\\(.*\\)$" 3 font-lock-constant-face)
+        (list "^\\([^ ]*\\)\\( [0-9]+\\):\t\\(.*::\\)*\\(.*\\)$" 4 font-lock-function-name-face)))
+
+;;(defvar taglist-keywords
+;;  (list ;;(list "^\t\\([^ ]*\\) \\(line[0-9]+\\):\t\\(.*\\)$" 1 font-lock-keyword-face)
+;;        (list "^\t\\([^ ]*\\) \\(line[0-9]+\\):\t\\(.*\\)$" 1 font-lock-number-face)
+;;        (list "^\t\\([^ ]*\\) \\(line[0-9]+\\):\t\\(.*\\)$" 2 font-lock-function-name-face)))
 
 (defvar taglist-map
   (let ((map (make-sparse-keymap)))
@@ -59,7 +65,8 @@
   (let ((line (buffer-substring
                (line-beginning-position)
                (line-end-position))))
-    (string-match "^\t\\([^ ]*\\) L\\([0-9]+\\):\t.*$" line)
+    (string-match "^\\([^ ]*\\) \\([0-9]+\\):\t.*$" line)
+;;    (string-match "^\t\\([^ ]*\\) L\\([0-9]+\\):\t.*$" line)
     (let ((file (match-string 1 line))
           (line (match-string 2 line)))
       (taglist-kill)
